@@ -1,15 +1,18 @@
 from django.shortcuts import render
-from .forms import CheckOutForm
 from django.http import HttpResponseRedirect
+from .forms import CheckOutForm
+from .models import *
 
 # Create your views here.
 
-def store (request):
 
-    items_list = ['Elemento 1', 'Elemento 2', 'Elemento 3', 'Elemento 4', 'Elemento 5']
-    return render(request, 'store/store.html',  {'items_list': items_list})
+def store(request):
+    items_list = ProductModel.objects.all()
+    context = {'items_list': items_list}
+    return render(request, 'store/store.html',  context)
 
-def cart (request):
+
+def cart(request):
     context ={}
     items_list = ['Elemento 1', 'Elemento 2', 'Elemento 3', 'Elemento 4', 'Elemento 5']
     return render(request, 'store/cart.html', {'items_list': items_list})

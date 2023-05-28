@@ -7,13 +7,13 @@
   {% for item in items_list %}
     <div class="col-md-4 col-sm-6" style="padding-top: 30px;">
       <div class="card" >
-        <img src="{% static 'images/placeholder.png' %}" class="card-img-top" alt="...">
+        <img src="{{item.imageURL}}" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title"> <strong>{{ item }}</strong></h5>
+          <h5 class="card-title"> <strong>{{ item.name }}</strong></h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           <a href="#" class="btn btn-outline-secondary add-btn">Add to the cart</a>
           <a class="btn btn-outline-success" href="#"> View </a>
-          <h4 style="display: inline-block; float: right"> 20$ </h4>
+          <h4 style="display: inline-block; float: right"> €{{item.price|floatformat:2}} </h4>
         </div>
       </div>
     </div>

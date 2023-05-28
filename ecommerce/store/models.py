@@ -15,10 +15,18 @@ class CustomerModel(models.Model):
 class ProductModel(models.Model):
     name = models.CharField(max_length=200, null=True)
     price = models.FloatField()
-    #image
+    image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    @property
+    def imageURL(self):   #senza questa funzione se ci fosse un prodotto senza immagine darebbe errore a tutta la pagina
+        try:
+            url = self.image.url
+        except:
+            url = ''
+        return url
 
 
 class OrderModel(models.Model):
@@ -39,7 +47,8 @@ class OrderItemModel(models.Model):
 
 
 class CheckOutModel(models.Model):
-    name = models.ForeignKey(CustomerModel, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=20, default='')
+    #name = models.ForeignKey(CustomerModel, on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(OrderModel, on_delete=models.SET_NULL, null=True, blank=True)
     surname = models.CharField(max_length=50)
     email = models.EmailField()
