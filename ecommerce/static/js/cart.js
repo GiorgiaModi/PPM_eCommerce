@@ -32,7 +32,7 @@ function updateOrder(itemId, action){
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body:JSON.stringify({'itemId': itemId, 'action': action})
+        body: JSON.stringify({'itemId': itemId, 'action': action})
     })
 
     //risposta

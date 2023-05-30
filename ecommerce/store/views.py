@@ -62,36 +62,39 @@ def checkout(request):
     return render(request, 'store/checkout.html', context)
 
 
-
 def update_item(request):
-    try:
-        data = json.loads(request.body)
-    except:
-        print('Error')
-    itemId = data['itemId']
-    action = data['action']
-    print('Action:', action)
-    print('itemId:', itemId)
+   if request.method == 'POST':
+       data = json.loads(request.body)
 
-    customer = request.user.customermodel
-    item = ProductModel.objects.get(id=itemId)
+       itemId = data['itemId']
+       action = data['action']
+       print('Action:', action)
+       print('itemId:', itemId)
 
-    #get order or create one
-    order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+       customer = request.user.customermodel
+       print('Customer:', customer)
+       item = ProductModel.objects.get(id=itemId)
+       print('Item:', item)
+       #get order or create one
+       order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+       print('Order:', order)
+       print('Order CREATO:', created)
+       orderItem, created = OrderItemModel.objects.get_or_create(order=order, product=item)
+       #se questo orderItem gia esiste nell'ordine, non voglio crearne uno nuovo ma incrementare la quantità
+       print('OrderItem:', orderItem)
+       print('OrderItem CREATO:', created)
+       print('OrderItemQuantityPRIMA:', orderItem.quantity)
+       if action == 'add-cart':
+           orderItem.quantity = (orderItem.quantity + 1)
+       elif action == 'remove':
+           orderItem.quantity = (orderItem.quantity - 1)
+       print('OrderItemQuantityDOPO:', orderItem.quantity)
+       orderItem.save()
 
-    orderItem, created = OrderItemModel.objects.get_or_create(order=order, product=item)
-    # se questo orderItem gia esiste nell'ordine, non voglio crearne uno nuovo ma incrementare la quantità
-    if action == 'add':
-        orderItem.quantity = (orderItem.quantity + 1)
-    elif action == 'remove':
-        orderItem.quantity = (orderItem.quantity - 1)
+       if orderItem.quantity <= 0:
+           orderItem.delete()
 
-    orderItem.save()
-
-    if orderItem.quantity <= 0:
-        orderItem.delete()
-
-    return JsonResponse('Item was added', safe=False)
+       return JsonResponse('Item was added', safe=False)
 
 
 """
