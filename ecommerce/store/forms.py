@@ -6,10 +6,20 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 
-class CheckOutForm(ModelForm):
+class CheckOutForm(forms.ModelForm):
     class Meta:
         model = CheckOutModel
         fields = ('name', 'surname', 'email', 'address', 'city', 'country', 'postalCode')
+
+    widgets = {
+        'name': forms.TextInput(attrs={'class': 'form-control'}),
+        'surname': forms.TextInput(attrs={'class': 'form-control'}),
+        'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        'address': forms.TextInput(attrs={'class': 'form-control'}),
+        'city': forms.TextInput(attrs={'class': 'form-control'}),
+        'country': forms.TextInput(attrs={'class': 'form-control'}),
+        'postalCode': forms.TextInput(attrs={'class': 'form-control'}),
+    }
 
 """
 class CheckOutForm(forms.Form):

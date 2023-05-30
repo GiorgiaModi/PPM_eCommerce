@@ -12,8 +12,8 @@
             {% else %}
                 <form action="" method="POST">
                     {% csrf_token %}
-                    {% crispy form %}
-                    <input type="submit" value="Submit" class="btn btn-secondary">
+                    {{ form.as_p }}
+                    <button type="submit" name="submit" class="btn btn-secondary">Submit</button>
                 </form>
             {% endif %}
 
@@ -58,4 +58,15 @@
     </div>
 </div>
 
+<!--
+<script type="text/javascript">
+    var form = document.getElementById('check-out-form');
+    form.addEventListener('submit', function(e){
+        e.preventDefault(); // Prevent form from submitting
+        console.log('form submitted...')
+        document.getElementById('payment-info').classList.remove('hidden');
+        document.getElementById('form-wrapper').classList.add('hidden');
+    })
+</script>
+-->
 {% endblock content %}

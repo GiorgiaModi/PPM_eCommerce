@@ -43,6 +43,7 @@ function updateOrder(itemId, action){
     //data
     .then((data) =>{
         console.log('data:', data)
+        location.reload()
     })
 }
 

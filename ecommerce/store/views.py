@@ -1,10 +1,8 @@
+from .forms import CheckOutForm
 import json
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_POST
-
-from .forms import CheckOutForm
 from .models import *
 
 
@@ -12,8 +10,18 @@ from .models import *
 
 
 def store(request):
+    if request.user.is_authenticated:
+        customer = request.user.customermodel
+        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+        items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
+        cart_items = order.calculate_cart_items
+    else:
+        items_list = []
+        order = {'calculate_cart_total': 0, 'calculate_checkout': 0}
+        cart_items = order['calculate_cart_items']
+
     items_list = ProductModel.objects.all()
-    context = {'items_list': items_list}
+    context = {'items_list': items_list, 'cart_items': cart_items}
     return render(request, 'store/store.html',  context)
 
 
@@ -22,42 +30,46 @@ def cart(request):
         customer = request.user.customermodel
         order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
         items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
+        cart_items = order.calculate_cart_items
     else:
         items_list = []
         order = {'calculate_cart_total': 0, 'calculate_checkout': 0}
+        cart_items = order['calculate_cart_items']
 
-    context = {'items_list': items_list, 'order': order}
+    context = {'items_list': items_list, 'order': order, 'cart_items': cart_items}
 
     return render(request, 'store/cart.html', context)
 
-
-#def checkout (request):
-    #context ={}
-    #items_list = ['Elemento 1', 'Elemento 2', 'Elemento 3', 'Elemento 4', 'Elemento 5']
-    #return render(request, 'store/checkout.html', {'items_list': items_list})
-
-
 def checkout(request):
     submitted = False
+
     if request.method == "POST":
-        form = CheckOutForm(request.POST)  #se l'utente compila il forma e clicca "Submit" verranno passati i dati a CheckOutForm
+        form = CheckOutForm(request.POST)
         if form.is_valid():
-            form.save() #save to database
+            post = form.save(commit=False)
+            order = None
+            if request.user.is_authenticated:
+                customer = request.user.customermodel
+                order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+            post.order = order  # Assegna l'ordine corrente all'istanza del form
+            post.save()
             return HttpResponseRedirect('/checkout?submitted=True')
     else:
-        if 'submitted' in request.GET: #user submitted the form
+        form = CheckOutForm()
+        if 'submitted' in request.GET:
             submitted = True
-    form = CheckOutForm
 
-    if request.user.is_authenticated:
-        customer = request.user.customermodel
-        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
-        items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
-    else:
-        items_list = []
-        order = {'calculate_cart_total': 0, 'calculate_checkout': 0, 'calculate_cart_items': 0}
+        if request.user.is_authenticated:
+            customer = request.user.customermodel
+            order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+            items_list = order.orderitemmodel_set.all()
+            cart_items = order.calculate_cart_items()
+        else:
+            items_list = []
+            order = {'calculate_cart_total': 0, 'calculate_checkout': 0, 'calculate_cart_items': 0}
+            cart_items = order['calculate_cart_items']
 
-    context = {'items_list': items_list, 'order': order, 'form': form, 'submitted': submitted}
+    context = {'items_list': items_list, 'order': order, 'form': form, 'submitted': submitted, 'cart_items': cart_items}
 
     return render(request, 'store/checkout.html', context)
 
@@ -84,7 +96,7 @@ def update_item(request):
        print('OrderItem:', orderItem)
        print('OrderItem CREATO:', created)
        print('OrderItemQuantityPRIMA:', orderItem.quantity)
-       if action == 'add-cart':
+       if action == 'add':
            orderItem.quantity = (orderItem.quantity + 1)
        elif action == 'remove':
            orderItem.quantity = (orderItem.quantity - 1)
@@ -96,25 +108,3 @@ def update_item(request):
 
        return JsonResponse('Item was added', safe=False)
 
-
-"""
-def add_to_cart(request, id):
-    item = ProductModel.objects.get(id=id)
-   
-    order = OrderModel.objects.filter(customer=request.user.customermodel, complete=False)
-    if order.exists():
-        order = order[0]
-    
-        #check if the order item is in the order
-        if order.items.filter(productmodel__id=item.id).exists():
-            order_item = OrderItemModel.objects.filter(product=item, order=order)[0]
-            order_item.quantity += 1
-            order_item.save()
-    else:
-        order = OrderModel.objects.create(customer=request.user.customermodel, complete=False)
-        order_item = OrderItemModel.objects.create(product=item, order=order, quantity=1)
-    
-
-    return redirect('store/store')
-
-"""

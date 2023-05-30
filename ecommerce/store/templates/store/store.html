@@ -10,9 +10,9 @@
         <img src="{{item.imageURL}}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title"> <strong>{{ item.name }}</strong></h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <p class="card-text">{{item.description}}</p>
 
-          <a href="#" class="btn btn-outline-secondary add-btn update-cart" data-action="add-cart" data-product="{{item.id}}">Add to cart</a>
+          <a href="#" class="btn btn-outline-secondary add-btn update-cart" data-action="add" data-product="{{item.id}}">Add to cart</a>
           <a class="btn btn-outline-success" href="#"> View </a>
           <h4 style="display: inline-block; float: right"> €{{item.price|floatformat:2}} </h4>
         </div>

@@ -29,14 +29,14 @@
                         <div style="flex:2"> {{item.product.name}}</div>
                         <div style="flex:1"> €{{item.product.price|floatformat:2}}</div>
                         <div style="flex:1">
-                            <p class="quantity">{{item.quantity}}</p>
+                            <p class="quantity" style="margin-top:0px;">{{item.quantity}}</p>
                             <div class="quantity">
-							<img data-product="{{item.product.id}}" data-action="add" class="change-quantity update-cart" src="{% static  'images/arrow-up.png' %}">
+							<img data-product="{{item.product.id}}" data-action="add" class="change-quantity update-cart" src="{% static  'images/plus.png' %}" style="height: 12px; width: 12px; margin-top: 5px;">
 
-							<img data-product="{{item.product.id}}" data-action="remove" class="change-quantity update-cart" src="{% static  'images/arrow-down.png' %}">
+							<img data-product="{{item.product.id}}" data-action="remove" class="change-quantity update-cart" src="{% static  'images/minus.png' %}" style="height: 12px; width: 12px; ">
 						</div>
                         </div>
-                        <div style="flex:1"> €{{item.calculate_total}}</div>
+                        <div style="flex:1"> €{{item.calculate_total|floatformat:2}}</div>
 
                     </div>
 
@@ -47,6 +47,9 @@
 
         </div>
         <div class="col-lg-4 col-md-12" style="padding-left: 20px;">
+            <div style="margin-bottom:20px;">
+                <a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Back to store</a>
+            </div>
             <div style="padding-bottom: 20px; border-bottom:1px solid rgba(0, 0, 0, 0.3); font-size:20px; ">
                 <strong> Order Summary </strong>
             </div>
