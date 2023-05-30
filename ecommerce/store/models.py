@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import reverse
 
 
 class CustomerModel(models.Model):
@@ -28,6 +29,12 @@ class ProductModel(models.Model):
             url = ''
         return url
 
+    """
+    def get_add_to_cart_url(self):
+        return reverse("add_to_cart", kwargs={
+            'id': self.id
+        })
+    """
 
 class OrderModel(models.Model):
     customer = models.ForeignKey(CustomerModel, on_delete=models.SET_NULL, blank=True, null=True)
@@ -38,12 +45,31 @@ class OrderModel(models.Model):
     def __str__(self):
         return str(self.id)
 
+    def calculate_cart_total(self):
+        orderitems = self.orderitemmodel_set.all()
+        total = sum([item.calculate_total for item in orderitems])
+        return total
+
+    def calculate_cart_items(self):
+        orderitems = self.orderitemmodel_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+
+    def calculate_checkout(self):
+        return self.calculate_cart_total()+5   #metti a posto se vuoi cambiare la shipping
+
+
 
 class OrderItemModel(models.Model):
     product = models.ForeignKey(ProductModel, on_delete=models.SET_NULL, null=True, blank=True)
     order = models.ForeignKey(OrderModel, on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def calculate_total(self):
+        total = self.product.price * self.quantity
+        return total
 
 
 class CheckOutModel(models.Model):
