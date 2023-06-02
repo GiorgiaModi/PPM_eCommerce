@@ -16,5 +16,12 @@ class RegisterUserForm(UserCreationForm):
         super(RegisterUserForm,self).__init__(*args, **kwargs)
 
         self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['placeholder'] = 'mariorossi'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
+        self.fields['password1'].widget.attrs['placeholder'] = '* * * * * * * *'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
+        self.fields['password2'].widget.attrs['placeholder'] = '* * * * * * * *'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Mario'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Rossi'
+        self.fields['email'].widget.attrs['placeholder'] = 'mariorossi@gmail.com'
+

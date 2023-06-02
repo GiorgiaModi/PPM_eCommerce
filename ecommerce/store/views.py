@@ -125,3 +125,52 @@ def update_item(request):
 
        return JsonResponse('Item was added', safe=False)
 
+
+def search(request):
+    if request.method == 'POST':
+        searched = request.POST['searched']
+        items = ProductModel.objects.filter(name__contains=searched)
+        return render(request, 'store/search.html', {'searched': searched, 'items': items})
+    else:
+        return render(request, 'store/search.html', {})
+
+
+def detail(request, id):
+    product = get_object_or_404(ProductModel, pk=id)
+
+    return render(request, 'store/detail.html', {
+        'product': product,
+    })
+
+
+@login_required
+def likeProduct(request, id):
+    username = request.user.username
+    productId = id
+
+    product = ProductModel.objects.get(pk=id)
+    like_filter = LikedProducts.objects.filter(productId=productId, username=username).first()
+
+    if not like_filter:
+        like = LikedProducts.objects.create(productId=productId, username=username)
+        #like = LikedProducts.objects.filter(productId=productId, username=username)
+        like.save()
+        product.numberOfLikes = product.numberOfLikes + 1
+        product.save()
+        return redirect('/detail/' + str(productId) + '/')
+    else:
+        like_filter.delete()
+        product.numberOfLikes = product.numberOfLikes - 1
+        product.save()
+        return redirect('/detail/' + str(productId) + '/')
+
+
+@login_required
+def likedProducts(request):
+    username = request.user.username
+    products = LikedProducts.objects.filter(username=username)
+    likedProd = ProductModel.objects.filter(id__in=products.values_list('productId', flat=True))
+
+    return render(request, 'store/likedProducts.html', {
+        'likedProducts': likedProd,
+    })

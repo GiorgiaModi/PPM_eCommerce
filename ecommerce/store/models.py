@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
-
+from django.urls import reverse
 
 class CustomerModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)   #a user can only have a customer and a customer canonly have a user
@@ -13,11 +12,25 @@ class CustomerModel(models.Model):
         return self.name
 
 
+class CategoryModel(models.Model):
+    name = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('home')
+
+
 class ProductModel(models.Model):
     name = models.CharField(max_length=200, null=True)
     price = models.FloatField()
+    category = models.ForeignKey(CategoryModel, on_delete=models.SET_NULL, null=True)
     image = models.ImageField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    numberOfLikes = models.IntegerField(default=0)
+
+
 
     def __str__(self):
         return self.name
