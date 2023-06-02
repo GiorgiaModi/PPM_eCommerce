@@ -61,6 +61,7 @@ def checkout(request):
                 order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
                 order.transaction_id = datetime.datetime.now().timestamp()
                 order.complete = True
+                order.date_order = datetime.datetime.now()
                 order.save()
             post.order = order  # Assegna l'ordine corrente all'istanza del form
             post.save()
@@ -113,6 +114,7 @@ def update_item(request):
        elif action == 'remove':
            orderItem.quantity = (orderItem.quantity - 1)
        print('OrderItemQuantityDOPO:', orderItem.quantity)
+       orderItem.date_added = datetime.datetime.now()
        orderItem.save()
 
        if orderItem.quantity <= 0:

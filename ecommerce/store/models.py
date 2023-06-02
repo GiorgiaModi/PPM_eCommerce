@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.shortcuts import reverse
+
 
 
 class CustomerModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)   #an user can only have a customer and a customer canonly have a user
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)   #a user can only have a customer and a customer canonly have a user
     name = models.CharField(max_length=50, null=True)
     surname = models.CharField(max_length=50, null=True)
     email = models.EmailField(max_length=50, null=True)
