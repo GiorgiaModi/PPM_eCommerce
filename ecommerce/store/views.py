@@ -1,9 +1,11 @@
-from .forms import CheckOutForm
+
 import json
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
 from .models import *
+from .forms import CheckOutForm
+import datetime
 
 
 # Create your views here.
@@ -41,9 +43,15 @@ def cart(request):
     return render(request, 'store/cart.html', context)
 
 def checkout(request):
+    model = CheckOutModel
+    template_name = 'store/checkout.html'
+    form_class = CheckOutForm
     submitted = False
 
     if request.method == "POST":
+        items_list = []
+        order = None
+        cart_items = 0
         form = CheckOutForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -51,8 +59,12 @@ def checkout(request):
             if request.user.is_authenticated:
                 customer = request.user.customermodel
                 order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+                order.transaction_id = datetime.datetime.now().timestamp()
+                order.complete = True
+                order.save()
             post.order = order  # Assegna l'ordine corrente all'istanza del form
             post.save()
+            print('form saved')
             return HttpResponseRedirect('/checkout?submitted=True')
     else:
         form = CheckOutForm()

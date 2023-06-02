@@ -30,18 +30,13 @@ class ProductModel(models.Model):
             url = ''
         return url
 
-    """
-    def get_add_to_cart_url(self):
-        return reverse("add_to_cart", kwargs={
-            'id': self.id
-        })
-    """
 
 class OrderModel(models.Model):
     customer = models.ForeignKey(CustomerModel, on_delete=models.SET_NULL, blank=True, null=True)
     date_order = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=True)
-    transaction_id = models.CharField(max_length=200, null=True)
+    transaction_id = models.CharField(max_length=5, null=True)
+
 
     def __str__(self):
         return str(self.id)
