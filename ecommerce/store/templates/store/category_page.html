@@ -1,0 +1,23 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="py-2" style="margin-top: 20px; font-size: 20px;"><i> Items in "{{category.name}}" category </i></div>
+<div class="row">
+  {% for item in items %}
+    <div class="col-md-4 col-sm-6" style="padding-top: 30px;">
+      <div class="card" >
+        <img src="{{item.imageURL}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title"> <strong>{{ item.name }}</strong></h5>
+
+          <a href="#" class="btn btn-outline-secondary add-btn update-cart" data-action="add" data-product="{{item.id}}">Add to cart</a>
+          <a class="btn btn-outline-secondary" href="{% url 'detail' item.id %}"> View </a>
+          <h6 style="display: inline-block; float: right"> €{{item.price|floatformat:2}} </h6>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock content %}

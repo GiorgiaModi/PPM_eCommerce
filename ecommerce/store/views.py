@@ -10,25 +10,18 @@ from .forms import CheckOutForm
 import datetime
 
 
-# Create your views here.
-
 
 def store(request):
     items_list = []
     cart_items = 0
+    categories = CategoryModel.objects.all()
     if request.user.is_authenticated:
         customer = CustomerModel.objects.get(user=request.user)
         order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
-        items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
         cart_items = order.calculate_cart_items
-    """
-    else:
-        items_list = []
-        order = {'calculate_cart_total': 0, 'calculate_checkout': 0}
-        cart_items = order['calculate_cart_items']
-"""
+
     items_list = ProductModel.objects.all()
-    context = {'items_list': items_list, 'cart_items': cart_items}
+    context = {'items_list': items_list, 'cart_items': cart_items, 'categories': categories}
     return render(request, 'store/store.html',  context)
 
 
@@ -42,15 +35,10 @@ def cart(request):
         items_list = []
         order = {'calculate_cart_total': 0, 'calculate_checkout': 0}
         cart_items = order['calculate_cart_items']
-
     context = {'items_list': items_list, 'order': order, 'cart_items': cart_items}
-
     return render(request, 'store/cart.html', context)
 
 def checkout(request):
-    model = CheckOutModel
-    template_name = 'store/checkout.html'
-    form_class = CheckOutForm
     submitted = False
 
     if request.method == "POST":
@@ -59,17 +47,14 @@ def checkout(request):
         cart_items = 0
         form = CheckOutForm(request.POST)
         if form.is_valid():
-            post = form.save(commit=False)
-            order = None
-            if request.user.is_authenticated:
-                customer = request.user.customermodel
-                order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
-                order.transaction_id = datetime.datetime.now().timestamp()
-                order.complete = True
-                order.date_order = datetime.datetime.now()
-                order.save()
-            post.order = order  # Assegna l'ordine corrente all'istanza del form
-            post.save()
+            customer = request.user.customermodel
+            order = OrderModel.objects.get(customer=customer, complete=False)
+            order.transaction_id = datetime.datetime.now().timestamp()
+            order.complete = True
+            order.date_order = datetime.datetime.now()
+            order.save()
+            form.instance.order = order  # Assegna l'ordine corrente all'istanza del form
+            form.save()
             print('form saved')
             return HttpResponseRedirect('/checkout?submitted=True')
     else:
@@ -83,12 +68,11 @@ def checkout(request):
             items_list = order.orderitemmodel_set.all()
             cart_items = order.calculate_cart_items()
         else:
+            order = None
             items_list = []
-            order = {'calculate_cart_total': 0, 'calculate_checkout': 0, 'calculate_cart_items': 0}
-            cart_items = order['calculate_cart_items']
+            cart_items = 0
 
     context = {'items_list': items_list, 'order': order, 'form': form, 'submitted': submitted, 'cart_items': cart_items}
-
     return render(request, 'store/checkout.html', context)
 
 
@@ -126,6 +110,15 @@ def update_item(request):
            orderItem.delete()
 
        return JsonResponse('Item was added', safe=False)
+
+
+def category(request, id):
+    category = get_object_or_404(CategoryModel, pk=id)
+    items = ProductModel.objects.filter(category=category)
+    return render(request, 'store/category_page.html', {
+        'category': category,
+        'items': items,
+    })
 
 
 def search(request):
