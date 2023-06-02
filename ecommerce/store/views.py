@@ -1,8 +1,10 @@
 
 import json
+
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import *
 from .forms import CheckOutForm
 import datetime

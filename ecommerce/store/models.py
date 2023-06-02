@@ -94,3 +94,11 @@ class CheckOutModel(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class LikedProducts(models.Model):
+    productId = models.CharField(max_length=50)
+    username = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.username
