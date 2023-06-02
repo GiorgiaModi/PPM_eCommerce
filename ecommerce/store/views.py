@@ -12,16 +12,19 @@ import datetime
 
 
 def store(request):
+    items_list = []
+    cart_items = 0
     if request.user.is_authenticated:
-        customer = request.user.customermodel
+        customer = CustomerModel.objects.get(user=request.user)
         order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
         items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
         cart_items = order.calculate_cart_items
+    """
     else:
         items_list = []
         order = {'calculate_cart_total': 0, 'calculate_checkout': 0}
         cart_items = order['calculate_cart_items']
-
+"""
     items_list = ProductModel.objects.all()
     context = {'items_list': items_list, 'cart_items': cart_items}
     return render(request, 'store/store.html',  context)
