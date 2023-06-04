@@ -6,15 +6,15 @@
     <div class="col-lg-6" >
         <div id="form-wrapper">
             {% if submitted %}
-                <div style="font-size: 20px; padding-bottom: 15px"><strong>Paypal Options</strong></div>
-                <button id="make-payment">Make payment</button>
-                <div id="paypal-button-container"></div>
+                <div style="font-size: 20px; padding-bottom: 15px"><strong>Your order has been completed successfully </strong>   <i class="fa-regular fa-face-smile-beam fa-lg"></i></div>
+                <div>
+                    <a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Back to Store For New Order!</a>
+                </div>
             {% else %}
                 <div style="font-size: 20px; padding-bottom: 15px"> <strong> Shipping Information </strong></div>
                 <form action="" method="POST" >
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <!-- idea: se l'user è gia loggato, non deve essere mostrato il form per nome cognome e email -->
                     <button type="submit" name="submit" class="btn btn-secondary">Submit</button>
                 </form>
             {% endif %}
@@ -24,57 +24,38 @@
 
 
     </div>
-    <div class="col-lg-6">
-        <div>
-            <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
-        </div>
-         <div style="padding-bottom: 15px; padding-top:20px; border-bottom:1px solid rgba(0, 0, 0, 0.3); font-size:20px; ">
-                <strong> Order Summary </strong>
-         </div>
-        <div>
-            {% for item in items_list %}
-                 <div class="row">
+    {% if not submitted %}
+        <div class="col-lg-6">
+            <div>
+                <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+            </div>
+             <div style="padding-bottom: 15px; padding-top:20px; border-bottom:1px solid rgba(0, 0, 0, 0.3); font-size:20px; ">
+                    <strong> Order Summary </strong>
+             </div>
+            <div>
+                {% for item in items_list %}
+                     <div class="row">
 
-                    <div class="col lg-12" style="display: flex; padding-bottom: 15px; padding-top: 15px">
-                        <div style="flex:2">
-                            <img src="{{item.product.imageURL}}" style="width: auto; height: 50px;">
+                        <div class="col lg-12" style="display: flex; padding-bottom: 15px; padding-top: 15px">
+                            <div style="flex:2">
+                                <img src="{{item.product.imageURL}}" style="width: auto; height: 50px;">
+                            </div>
+                            <div style="flex:2"> {{item.product.name}}</div>
+                            <div style="flex:1"> €{{item.product.price}}</div>
+                            <div style="flex:1">{{item.quantity}}</div>
+
                         </div>
-                        <div style="flex:2"> {{item.product.name}}</div>
-                        <div style="flex:1"> €{{item.product.price}}</div>
-                        <div style="flex:1">{{item.quantity}}</div>
-
+                        <hr>
                     </div>
-                    <hr>
-                </div>
-                {% endfor %}
-                <div style="font-size: 17px ">
-                    Items: {{order.calculate_cart_items}}
-                    <br>
-                    Total: €{{order.calculate_checkout|floatformat:2}}
-                </div>
+                    {% endfor %}
+                    <div style="font-size: 17px ">
+                        Items: {{order.calculate_cart_items}}
+                        <br>
+                        Total: €{{order.calculate_cart_total|floatformat:2}}
+                    </div>
+            </div>
         </div>
-    </div>
+    {% endif %}
 </div>
-<!--
-<script>
-    document.getElementById('make-payment').addEventListener('click', function(e){
-           submitFormData();
-    })
 
-    function submitFormData(){
-        console.log('Payment button clicked')
-
-        var formData = {
-            'name':null,
-            'surname':null,
-            'email':null,
-            'total':total,
-            'address':null,
-            'city':null,
-            'country':null,
-            'postalCode':null,
-        }
-    }
-</script>
--->
 {% endblock content %}

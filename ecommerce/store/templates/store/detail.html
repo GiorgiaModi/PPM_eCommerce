@@ -16,24 +16,33 @@
         <div style="font-size: 20px; margin-top: 20px;"><strong><i>Price</i></strong></div>
         {{product.price|floatformat:2}} €
 
-        {% if product.numberOfLikes == 0 %}
-            <div style="margin-top:20px; text-align: right; font-size: 20px;" class="p-2"><b> 0 Likes </b></div>
-        {% elif product.numberOfLikes == 1 %}
-            <div style="margin-top:20px; text-align: right; font-size: 20px;" class="p-2"><b>Liked by {{ product.numberOfLikes }} customer</b></div>
-        {% else %}
-            <div style="margin-top:20px; text-align: right; font-size: 20px;" class="p-2"><b>Liked by {{ product.numberOfLikes }} customers</b></div>
-        {% endif %}
 
         {% if request.user.is_authenticated %}
-            <div style="display:flex; justify-content: right">
-            <a href="{% url 'likeProduct' product.id %}" class="addLike" title="like" >
-                <i class="fa-regular fa-thumbs-up fa-xl" style="color:black"></i>
-            </a>
-            </div>
+            {% if liked_object%}
+                <div style="font-size: 18px; text-align: right">
+                    You like this product!
+                </div>
+                <div style="display:flex; justify-content: right">
+                <a href="{% url 'likeProduct' product.id %}" class="addLike" title="like" >
+                    <i class="fa-solid fa-heart fa-xl" style="color:black"></i>
+                </a>
+                </div>
+            {% else %}
+                <div style="font-size: 18px; text-align: right">
+                    Click the heart to add to wishlist!
+                <div style="display:flex; justify-content: right">
+                <a href="{% url 'likeProduct' product.id %}" class="addLike" title="like" >
+                    <i class="fa-regular fa-heart fa-xl" style="color:black"></i>
+                </a>
+                </div>
+            {% endif %}
         {% else %}
-            <a class="login py-1" href="{% url 'login' %}">
-                        <button type="button" class="btn btn-outline-secondary rounded-3 px-4 ">Login to like products!</button>
-                    </a>
+            <div style="font-size: 18px; text-align: right">
+
+                <a class="login py-1" href="{% url 'login' %}">
+                            <button type="button" class="btn btn-outline-secondary rounded-3 px-4 ">Login to like products!</button>
+                </a>
+            </div>
         {% endif %}
 
         </a>

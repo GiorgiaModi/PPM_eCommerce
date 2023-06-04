@@ -20,23 +20,21 @@ def store(request):
         order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
         cart_items = order.calculate_cart_items
 
-    items_list = ProductModel.objects.all()
+    items_list = ProductModel.objects.all().order_by('name')
+
     context = {'items_list': items_list, 'cart_items': cart_items, 'categories': categories}
     return render(request, 'store/store.html',  context)
 
 
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customermodel
-        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
-        items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
-        cart_items = order.calculate_cart_items
-    else:
-        items_list = []
-        order = {'calculate_cart_total': 0, 'calculate_checkout': 0}
-        cart_items = order['calculate_cart_items']
+    customer = request.user.customermodel
+    order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+    items_list = order.orderitemmodel_set.all()   #rende tutti gli item di quell'ordine
+    cart_items = order.calculate_cart_items
+
     context = {'items_list': items_list, 'order': order, 'cart_items': cart_items}
     return render(request, 'store/cart.html', context)
+
 
 def checkout(request):
     submitted = False
@@ -115,26 +113,55 @@ def update_item(request):
 def category(request, id):
     category = get_object_or_404(CategoryModel, pk=id)
     items = ProductModel.objects.filter(category=category)
+    cart_items = 0
+    if request.user.is_authenticated:
+        customer = request.user.customermodel
+        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+        cart_items = order.calculate_cart_items
+    else:
+        order = None
+        cart_items = 0
+
     return render(request, 'store/category_page.html', {
         'category': category,
         'items': items,
+        'cart_items': cart_items,
     })
 
 
 def search(request):
+    cart_items = 0
+    if request.user.is_authenticated:
+        customer = request.user.customermodel
+        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+        cart_items = order.calculate_cart_items
+    else:
+        order = None
+        cart_items = 0
+
     if request.method == 'POST':
         searched = request.POST['searched']
         items = ProductModel.objects.filter(name__contains=searched)
-        return render(request, 'store/search.html', {'searched': searched, 'items': items})
+        return render(request, 'store/search.html', {'searched': searched, 'items': items, 'cart_items': cart_items})
     else:
-        return render(request, 'store/search.html', {})
+        return render(request, 'store/search.html', {'cart_items': cart_items})
 
 
 def detail(request, id):
     product = get_object_or_404(ProductModel, pk=id)
+    liked_object = LikedProducts.objects.filter(productId=id, username=request.user.username).first()
+    cart_items = 0
+    if request.user.is_authenticated:
+        customer = request.user.customermodel
+        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+        cart_items = order.calculate_cart_items
+    else:
+        cart_items = 0
 
     return render(request, 'store/detail.html', {
         'product': product,
+        'cart_items': cart_items,
+        'liked_object': liked_object,
     })
 
 
@@ -165,7 +192,16 @@ def likedProducts(request):
     username = request.user.username
     products = LikedProducts.objects.filter(username=username)
     likedProd = ProductModel.objects.filter(id__in=products.values_list('productId', flat=True))
-
+    if request.user.is_authenticated:
+        customer = request.user.customermodel
+        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+        cart_items = order.calculate_cart_items
     return render(request, 'store/likedProducts.html', {
         'likedProducts': likedProd,
+        'cart_items': cart_items,
     })
+
+
+def order_by_name(request):
+    products_list = ProductModel.objects.all().order_by('name')
+    render(request, 'store', {'products_list': products_list})

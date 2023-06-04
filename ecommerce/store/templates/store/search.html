@@ -11,9 +11,12 @@
                     <img src="{{item.imageURL}}" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title"> <strong>{{ item.name }}</strong></h5>
-
-                      <a href="#" class="btn btn-outline-secondary add-btn update-cart" data-action="add" data-product="{{item.id}}">Add to cart</a>
-                      <a class="btn btn-outline-secondary" href="{% url 'detail' item.id %}"> View </a>
+                        {% if user.is_authenticated%}
+                            <a href="{% url 'cart' %}" class="btn btn-outline-secondary add-btn update-cart" data-action="add" data-product="{{item.id}}">Add to cart</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-secondary add-btn update-cart" data-action="add" data-product="{{item.id}}">Login to add to cart</a>
+                        {% endif %}
+                        <a class="btn btn-outline-secondary" href="{% url 'detail' item.id %}"> View </a>
                       <h5 style="display: inline-block; float: right"> €{{item.price|floatformat:2}} </h5>
                     </div>
                   </div>
@@ -21,7 +24,7 @@
         {% endfor %}
         </div>
     {% else %}
-        You searched for nothing
+        <div style="margin-top: 20px; font-size: 20px;">You searched for nothing... Try again</div>
     {% endif %}
 
 
