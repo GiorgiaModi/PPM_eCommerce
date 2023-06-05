@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-t^j@w2xeqz+f1=lddcu-$r)#)2%sd^c8-ockmzps_&2dgzl8!4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 #CSRF_TRUSTED_ORIGINS = [] #FIXME QUI DENTRO LE GRAFFE TRA APICI IL LINK DI DEPLOY
 #CORS_ALLOWED_ORIGINS = [] #FIXME COME SOPRA
 #CSRF_COOKIE_DOMAIN = '' #FIXME COME SOPRA PERÒ LINK SENZA GRAFFE
@@ -127,12 +127,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
 MEDIA_URL = '/images/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 # Default primary key field type
