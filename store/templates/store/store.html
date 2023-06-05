@@ -2,13 +2,20 @@
 {% load static %}
 {% block content %}
 
-<div style="display: flex; align-items: center; justify-content: center; ">
-  {% for category in categories %}
-    <div style="padding-top: 20px;">
-      <a style="text-decoration: none; color: black; font-size: 19px; padding: 10px 50px;text-transform: uppercase; border: 0.5px solid black" href="{% url 'category' category.id %}"><b>{{category.name}}</b></a>
+<div class="row">
+  <div class="col-lg-2 col-md-12 col-sm-12">
 
+  </div>
+  {% for category in categories %}
+    <div class="col-lg-3 col-md-12 col-sm-12 text-center">
+      <div style="padding-top: 20px;">
+        <a style="text-decoration: none; color: black; font-size: 19px; padding: 10px 50px;text-transform: uppercase; border: 0.5px solid black" href="{% url 'category' category.id %}"><b>{{category.name}}</b></a>
+      </div>
     </div>
   {% endfor %}
+  <div class="col-lg-1 col-md-12 col-sm-12">
+
+  </div>
 </div>
 
 <div class="row">
