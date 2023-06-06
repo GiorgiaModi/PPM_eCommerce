@@ -1,6 +1,9 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block content %}
+<div style="margin-top: 20px">
+  <a  class="btn btn-outline-dark" href="{% url 'detail' product.id %}"> &#x2190; Back to product's details</a>
+</div>
 
 <div style="font-size: 22px; margin-top: 10px; margin-bottom: 10px;">
   <strong>Add your review</strong>

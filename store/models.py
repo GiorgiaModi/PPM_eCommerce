@@ -105,11 +105,19 @@ class LikedProducts(models.Model):
 
 
 class Review(models.Model):
+    CHOICES = [
+        ('0', 'Zero stelle'),
+        ('1', 'Una stella'),
+        ('2', 'Due stelle'),
+        ('3', 'Tre stelle'),
+        ('4', 'Quattro stelle'),
+        ('5', 'Cinque stelle'),
+    ]
     customer = models.ForeignKey(CustomerModel, on_delete=models.CASCADE)
-    date_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateField(auto_now_add=True)
     product = models.ForeignKey(ProductModel, related_name="reviews", on_delete=models.CASCADE)
     content = models.TextField(max_length=300)
-
+    rating = models.CharField(max_length= 20, choices=CHOICES, default= 'star0')
 
     def __str__(self):
         return '%s - %s' % (self.product.name, self.customer.name)

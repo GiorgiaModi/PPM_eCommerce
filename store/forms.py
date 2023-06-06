@@ -29,11 +29,12 @@ class CheckOutForm(forms.ModelForm):
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ('content',)
+        fields = ('rating', 'content',)
 
     def __init__(self, *args, **kwargs):
         super(ReviewForm, self).__init__(*args, **kwargs)
 
+        self.fields['rating'].widget.attrs['class'] = 'form-control'
         self.fields['content'].widget.attrs['class'] = 'form-control'
         self.fields['content'].widget.attrs['placeholder'] = 'Write your review'
-
+        self.fields['content'].label = False

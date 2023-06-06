@@ -67,6 +67,44 @@
                     <br/>
                     {{ review.date_added}}
                 </div>
+                {% if review.rating|add:0 == 0 %}
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                {% elif review.rating|add:0 == 1 %}
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+
+                {% elif review.rating|add:0 == 2 %}
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                {% elif review.rating|add:0 == 3 %}
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                {% elif review.rating|add:0 == 4 %}
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-regular fa-star" style="color: #f5ec00;"></i>
+                {% elif review.rating|add:0 == 5 %}
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                    <i class="fa-solid fa-star" style="color: #f5ec00;"></i>
+                {% endif %}
                 <hr>
                 <div>
                     {{ review.content }}

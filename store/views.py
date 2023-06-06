@@ -161,6 +161,7 @@ def detail(request, id):
         'product': product,
         'cart_items': cart_items,
         'liked_object': liked_object,
+
     })
 
 
@@ -202,16 +203,18 @@ def likedProducts(request):
 
 
 def addReview(request, id):
+    product = ProductModel.objects.get(id=id)
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
             customer = request.user.customermodel
             form.instance.customer = customer
-            form.instance.date_added = datetime.datetime.now()
-            product = ProductModel.objects.get(id=id)
+            form.instance.date_added = datetime.date.today()
             form.instance.product = product
             form.save()
+            rating = form.cleaned_data['rating']
             detail_url = reverse('detail', args=[id])
+            detail_url += f'?rating={rating}'
             return redirect(detail_url)
     else:
         form = ReviewForm()
@@ -222,7 +225,7 @@ def addReview(request, id):
         cart_items = order.calculate_cart_items
     else:
         cart_items = 0
-    context = {'form': form, 'cart_items': cart_items}
+    context = {'form': form, 'cart_items': cart_items, 'product': product}
     return render(request, 'store/add_review.html', context)
 
 
