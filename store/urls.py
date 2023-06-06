@@ -15,5 +15,6 @@ urlpatterns = [
     path('likedProducts/', views.likedProducts, name='likedProducts'),
     path('category_page/<int:id>/', views.category, name='category'),
     path('detail/<int:id>/add_review/', views.addReview, name='addReview'),
-    path('deleteReview/<int:id>/', views.deleteReview, name='deleteReview')
+    path('deleteReview/<int:id>/', views.deleteReview, name='deleteReview'),
+    path('order_history/', views.orderHistory, name='orderHistory')
 ]

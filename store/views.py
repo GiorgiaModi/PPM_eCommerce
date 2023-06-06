@@ -235,3 +235,10 @@ def deleteReview(request, id):
     review.delete()
     detail_url = reverse('detail', args=[product_id])
     return redirect(detail_url)
+
+
+def orderHistory(request):
+    customer = request.user.customermodel
+    orders = OrderModel.objects.filter(customer=customer, complete=True)
+    context = {'orders': orders, 'customer': customer}
+    return render(request, 'store/order_history.html', context)

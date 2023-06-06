@@ -64,9 +64,10 @@ class OrderModel(models.Model):
         total = sum([item.quantity for item in orderitems])
         return total
 
-    def calculate_checkout(self):
-        return self.calculate_cart_total()+5   #metti a posto se vuoi cambiare la shipping
-
+    def get_ordered_products(self):
+        order_items = self.orderitemmodel_set.all()
+        products = [item.product for item in order_items]
+        return products
 
 
 class OrderItemModel(models.Model):

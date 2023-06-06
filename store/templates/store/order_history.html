@@ -1,0 +1,31 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div style="display: flex; justify-content: right; margin-top: 15px;">
+    <a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Back to Store </a>
+</div>
+<div style="font-size: 21px; margin-top: 10px; margin-bottom: 10px;">
+        <strong> Hi {{customer.name}}, this is your order history </strong>
+</div>
+
+{% for order in orders %}
+        <div class="shadow p-3 mb-3 bg-body-tertiary rounded">
+                <div>
+                    <strong>Order </strong>
+                    {{ order.id }}
+                    <br/>
+                    <strong>Date order: </strong>
+                    {{ order.date_order}}
+                </div>
+                <hr>
+                <div>
+                    <ul>
+                        {% for product in order.get_ordered_products %}
+                            <li>{{ product.name }}  </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+        </div>
+{% endfor %}
+
+{% endblock content %}
