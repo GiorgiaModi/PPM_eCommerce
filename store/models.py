@@ -102,3 +102,15 @@ class LikedProducts(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class Review(models.Model):
+    customer = models.ForeignKey(CustomerModel, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    product = models.ForeignKey(ProductModel, related_name="reviews", on_delete=models.CASCADE)
+    content = models.TextField(max_length=300)
+
+
+    def __str__(self):
+        return '%s - %s' % (self.product.name, self.customer.name)
+

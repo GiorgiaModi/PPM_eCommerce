@@ -6,6 +6,7 @@ from .models import OrderItemModel
 from .models import CheckOutModel
 from .models import LikedProducts
 from .models import CategoryModel
+from .models import Review
 
 
 admin.site.register(CustomerModel)
@@ -15,4 +16,4 @@ admin.site.register(OrderItemModel)
 admin.site.register(CheckOutModel)
 admin.site.register(LikedProducts)
 admin.site.register(CategoryModel)
-
+admin.site.register(Review)

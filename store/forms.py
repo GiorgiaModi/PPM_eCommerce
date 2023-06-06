@@ -1,9 +1,5 @@
 from django import forms
-from django.forms import ModelForm
-from .models import CheckOutModel
-from django.urls import reverse_lazy
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from .models import CheckOutModel, Review
 
 
 class CheckOutForm(forms.ModelForm):
@@ -29,4 +25,15 @@ class CheckOutForm(forms.ModelForm):
         self.fields['postalCode'].widget.attrs['class'] = 'form-control'
         self.fields['postalCode'].widget.attrs['placeholder'] = '00100'
 
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('content',)
+
+    def __init__(self, *args, **kwargs):
+        super(ReviewForm, self).__init__(*args, **kwargs)
+
+        self.fields['content'].widget.attrs['class'] = 'form-control'
+        self.fields['content'].widget.attrs['placeholder'] = 'Write your review'
 

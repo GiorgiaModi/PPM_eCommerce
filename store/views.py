@@ -1,12 +1,11 @@
-
-import json
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+import json
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import CreateView
 from .models import *
-from .forms import CheckOutForm
+from .forms import CheckOutForm, ReviewForm
 import datetime
 
 
@@ -50,7 +49,7 @@ def checkout(request):
             order.transaction_id = datetime.datetime.now().timestamp()
             order.complete = True
             order.date_order = datetime.datetime.now()
-            order.save()
+            order.save() #FIXME: forse è questo che fa doppio ordine
             form.instance.order = order  # Assegna l'ordine corrente all'istanza del form
             form.save()
             print('form saved')
@@ -202,6 +201,34 @@ def likedProducts(request):
     })
 
 
-def order_by_name(request):
-    products_list = ProductModel.objects.all().order_by('name')
-    render(request, 'store', {'products_list': products_list})
+def addReview(request, id):
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            customer = request.user.customermodel
+            form.instance.customer = customer
+            form.instance.date_added = datetime.datetime.now()
+            product = ProductModel.objects.get(id=id)
+            form.instance.product = product
+            form.save()
+            detail_url = reverse('detail', args=[id])
+            return redirect(detail_url)
+    else:
+        form = ReviewForm()
+
+    if request.user.is_authenticated:
+        customer = request.user.customermodel
+        order, created = OrderModel.objects.get_or_create(customer=customer, complete=False)
+        cart_items = order.calculate_cart_items
+    else:
+        cart_items = 0
+    context = {'form': form, 'cart_items': cart_items}
+    return render(request, 'store/add_review.html', context)
+
+
+def deleteReview(request, id):
+    review = get_object_or_404(Review, id=id)
+    product_id = review.product.id
+    review.delete()
+    detail_url = reverse('detail', args=[product_id])
+    return redirect(detail_url)

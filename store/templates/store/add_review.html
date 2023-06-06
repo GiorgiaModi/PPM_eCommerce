@@ -1,0 +1,16 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div style="font-size: 22px; margin-top: 10px; margin-bottom: 10px;">
+  <strong>Add your review</strong>
+</div>
+<div class="form-wrapper">
+  <form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="submit" class="btn btn-secondary">Submit review</button>
+  </form>
+</div>
+
+{% endblock content %}
