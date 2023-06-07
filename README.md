@@ -1,7 +1,10 @@
 # eCommerce_PPM
 Progetto PPM 2023 Back-end (UniFi)
+
 Giorgia Modi
+
 Per il progetto di back-end per l'esame di Progettazione e Produzione Multimediale ho realizzato un e-commerce per la vendita di prodotti per l'equitazione. 
+
 Ho implementato le seguenti funzionalità:
 1. Sign up
 2. Login
