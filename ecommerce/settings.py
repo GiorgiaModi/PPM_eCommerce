@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = ['https://ecommerceppm-production.up.railway.app']
 CORS_ALLOWED_ORIGINS = ['https://ecommerceppm-production.up.railway.app']
 CSRF_COOKIE_DOMAIN = 'https://ecommerceppm-production.up.railway.app'
-
+CORS_ORIGIN_WHITELIST = ['https://ecommerceppm-production.up.railway.app']
 
 # Application definition
 
