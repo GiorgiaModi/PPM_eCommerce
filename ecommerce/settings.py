@@ -26,11 +26,11 @@ SECRET_KEY = 'django-insecure-t^j@w2xeqz+f1=lddcu-$r)#)2%sd^c8-ockmzps_&2dgzl8!4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['https://ecommerceppm-production.up.railway.app']
-CORS_ALLOWED_ORIGINS = ['https://ecommerceppm-production.up.railway.app']
-CSRF_COOKIE_DOMAIN = 'https://ecommerceppm-production.up.railway.app'
-CORS_ORIGIN_WHITELIST = ['https://ecommerceppm-production.up.railway.app']
+ALLOWED_HOSTS = ['ecommerceppm-production.up.railway.app', '127.0.0.1',]
+
+CSRF_TRUSTED_ORIGINS = ['https://ecommerceppm-production.up.railway.app',]
+
+CORS_ORIGIN_WHITELIST = ['https://ecommerceppm-production.up.railway.app',]
 
 # Application definition
 
