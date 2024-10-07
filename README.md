@@ -1,19 +1,28 @@
-# eCommerce_PPM
-Progetto PPM 2023 Back-end (UniFi)
+# 🛒 eCommerce PPM
 
-Giorgia Modi
+Welcome to the **eCommerce PPM** project, your go-to platform for all things equestrian! This project is a comprehensive back-end application designed as part of my coursework for the Progettazione e Produzione Multimediale (PPM) program at UniFi in 2023.
 
-Per il progetto di back-end per l'esame di Progettazione e Produzione Multimediale ho realizzato un e-commerce per la vendita di prodotti per l'equitazione. 
+## 🌟 Features
 
-Ho implementato le seguenti funzionalità:
-1. Sign up
-2. Login
-3. Logout
-4. Aggiunta di prodotti al carrello 
-5. Modifica del carrello (modificare quantità, eliminare prodotti, aggiungere prodotti)
-6. Gestione dell'ordine tramite il form di checkout
-7. Ricerca dei prodotti
-8. Filtraggio dei prodotti in base alle rispettive categorie di appartenenza
-9. Whishlist
-10. Storico ordini
-11. Recensioni dei prodotti (possibilità di eliminare la recensione se ne sei l'autore)
+### User Management
+- **Sign Up & Login**: Create an account and log in to access exclusive features.
+- **Profile Management**: Edit your user profile easily.
+
+### Shopping Cart
+- **Dynamic Cart**: Add products to your cart, adjust quantities, and remove items effortlessly.
+- **Checkout Process**: Smooth checkout experience with order confirmation.
+
+### Product Discovery
+- **Search & Filter**: Find your favorite equestrian products using the search bar and filter by category.
+- **Product Reviews**: Rate and review products to help others in their shopping journey.
+
+### Wishlist
+- **Save for Later**: Add items to your wishlist for future purchases.
+
+### Order History
+- **Track Your Orders**: View your past purchases and keep track of your order status.
+
+## 💻 Technologies Used
+- **Python**: For the back-end logic and handling data.
+- **HTML & CSS**: To create a user-friendly interface.
+- **JavaScript**: To enhance interactivity on the front-end.
