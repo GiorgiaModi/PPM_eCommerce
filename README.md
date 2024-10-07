@@ -1,6 +1,6 @@
 # 🛒 eCommerce PPM
 
-Welcome to the **eCommerce PPM** project, your go-to platform for all things equestrian! This project is a comprehensive back-end application designed as part of my coursework for the Progettazione e Produzione Multimediale (PPM) program at UniFi in 2023.
+PPM_eCommerce is a back-end project developed for the Progettazione e Produzione Multimediale (PPM) course at UniFi. This application is designed to facilitate the purchase of equestrian articles, providing a seamless online shopping experience.
 
 ## 🌟 Features
 
